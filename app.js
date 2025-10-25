@@ -1,118 +1,214 @@
-// --------------------------
-// Variables globales
-// --------------------------
-let movimientos = []; // Array de transacciones
-let saldo = 0;
-let ingresos = 0;
-let gastos = 0;
-let ahorro = 0;
+// ===============================================================
+// 📘 app.js — Lógica principal de "Cartera Inteligente"
+// ===============================================================
+// Objetivo: permitir registrar ingresos, gastos y ahorro automático (10% de cada ingreso)
+// sin manejo de dinero real. Todo se guarda temporalmente en memoria (LocalStorage opcional).
+// ===============================================================
 
-// --------------------------
-// Frases motivacionales aleatorias
-// --------------------------
-const frases = [
-  "“Tu dinero trabaja mejor cuando tú descansas.” 😎",
-  "“Cada euro ahorrado es un paso hacia tu libertad financiera.” 💡",
-  "“Ahorra primero, gasta después, disfruta siempre.” 🏦",
-  "“Un pequeño hábito hoy, grandes resultados mañana.” 🚀"
-];
 
-function mostrarFrase() {
-  const fraseElemento = document.getElementById("frase-motivacional");
-  const aleatoria = frases[Math.floor(Math.random() * frases.length)];
-  fraseElemento.textContent = aleatoria;
-}
+// 🧠 VARIABLES GLOBALES
+// ---------------------------------------------------------------
 
-// Ejecutar al cargar la página
-mostrarFrase();
+// Array donde se almacenan todas las transacciones del usuario
+let transacciones = [];
 
-// --------------------------
-// Función para actualizar resumen
-// --------------------------
+// Variable para guardar la divisa seleccionada
+let divisaActual = "EUR";
+
+
+// 🧮 FUNCIONES PRINCIPALES
+// ---------------------------------------------------------------
+
+/**
+ * Función para actualizar el resumen financiero (saldo, ingresos, gastos y ahorro)
+ * Recorre todas las transacciones y suma según el tipo.
+ */
 function actualizarResumen() {
-  document.getElementById("saldo-total").textContent = saldo.toFixed(2);
-  document.getElementById("ingresos-total").textContent = ingresos.toFixed(2);
-  document.getElementById("gastos-total").textContent = gastos.toFixed(2);
-  document.getElementById("ahorro-total").textContent = ahorro.toFixed(2);
+    let ingresos = 0;
+    let gastos = 0;
+    let ahorro = 0;
+
+    transacciones.forEach(t => {
+        if (t.tipo === "ingreso") ingresos += t.monto;
+        if (t.tipo === "gasto") gastos += t.monto;
+        if (t.tipo === "ahorro") ahorro += t.monto;
+    });
+
+    // Calcular saldo disponible (restando gastos y ahorro)
+    const saldo = ingresos - gastos - ahorro;
+
+    // Mostrar en pantalla los totales actualizados
+    document.getElementById("ingresos-total").textContent = `${formatearMoneda(ingresos)}`;
+    document.getElementById("gastos-total").textContent = `${formatearMoneda(gastos)}`;
+    document.getElementById("ahorro-total").textContent = `${formatearMoneda(ahorro)}`;
+    document.getElementById("saldo-total").textContent = `${formatearMoneda(saldo)}`;
 }
 
-// --------------------------
-// Función para añadir transacción
-// --------------------------
-document.getElementById("form-transaccion").addEventListener("submit", function (e) {
-  e.preventDefault();
+/**
+ * Función para renderizar la tabla de movimientos
+ */
+function renderizarTabla() {
+    const tbody = document.getElementById("tabla-movimientos");
+    tbody.innerHTML = "";
 
-  const descripcion = document.getElementById("descripcion").value;
-  const monto = parseFloat(document.getElementById("monto").value);
-  const tipo = document.getElementById("tipo").value;
-  const divisa = document.getElementById("divisa").value;
-  const fecha = new Date().toLocaleDateString();
+    if (transacciones.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-secondary fst-italic">Aún no hay movimientos registrados 🧾</td></tr>`;
+        return;
+    }
 
-  if (!descripcion || !monto || !tipo) return;
+    transacciones.forEach((t, index) => {
+        const fila = document.createElement("tr");
 
-  // Ajuste según tipo
-  if (tipo === "ingreso") {
-    ingresos += monto;
-    saldo += monto;
-    ahorro += monto * 0.10; // 10% ahorro
-    saldo -= monto * 0.10; // descuento directo del ahorro
-  } else if (tipo === "gasto") {
-    gastos += monto;
-    saldo -= monto;
-  }
+        fila.innerHTML = `
+            <td>${t.descripcion}</td>
+            <td>${formatearMoneda(t.monto)}</td>
+            <td>${formatearTipo(t.tipo)}</td>
+            <td>${t.fecha}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-danger" onclick="eliminarTransaccion(${index})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(fila);
+    });
+}
 
-  // Añadir al historial
-  movimientos.push({ descripcion, monto, tipo, fecha, divisa });
+/**
+ * Función para eliminar una transacción
+ */
+function eliminarTransaccion(index) {
+    transacciones.splice(index, 1);
+    actualizarResumen();
+    renderizarTabla();
+}
 
-  // Actualizar tabla
-  const tbody = document.getElementById("tabla-movimientos");
-  const fila = document.createElement("tr");
-  fila.innerHTML = `
-    <td>${descripcion}</td>
-    <td>${monto.toFixed(2)} ${divisa}</td>
-    <td>${tipo}</td>
-    <td>${fecha}</td>
-    <td><button class="btn btn-sm btn-danger btn-eliminar">Eliminar</button></td>
-  `;
-  tbody.appendChild(fila);
+/**
+ * Función para formatear números a la divisa actual seleccionada
+ */
+function formatearMoneda(valor) {
+    return new Intl.NumberFormat("es-ES", {
+        style: "currency",
+        currency: divisaActual,
+    }).format(valor);
+}
 
-  // Eliminar mensaje "no hay movimientos"
-  if (movimientos.length === 1) {
-    tbody.querySelector("tr").remove();
-  }
+/**
+ * Devuelve el tipo con color o ícono según corresponda
+ */
+function formatearTipo(tipo) {
+    if (tipo === "ingreso") return `<span class="text-success fw-semibold">Ingreso</span>`;
+    if (tipo === "gasto") return `<span class="text-danger fw-semibold">Gasto</span>`;
+    if (tipo === "ahorro") return `<span class="text-warning fw-semibold">Ahorro</span>`;
+    return tipo;
+}
 
-  actualizarResumen();
 
-  // Limpiar formulario
-  this.reset();
+// 💾 GUARDADO LOCAL (opcional)
+// ---------------------------------------------------------------
+
+function guardarLocal() {
+    localStorage.setItem("transacciones", JSON.stringify(transacciones));
+}
+
+function cargarLocal() {
+    const data = localStorage.getItem("transacciones");
+    if (data) {
+        transacciones = JSON.parse(data);
+        actualizarResumen();
+        renderizarTabla();
+    }
+}
+
+
+// 📅 GENERAR FECHA FORMATEADA
+// ---------------------------------------------------------------
+function obtenerFechaActual() {
+    const hoy = new Date();
+    return hoy.toLocaleDateString("es-ES", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+    });
+}
+
+
+// 🧾 MANEJO DEL FORMULARIO
+// ---------------------------------------------------------------
+
+document.getElementById("form-transaccion").addEventListener("submit", e => {
+    e.preventDefault();
+
+    // Capturar datos del formulario
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const monto = parseFloat(document.getElementById("monto").value);
+    const tipo = document.getElementById("tipo").value;
+    divisaActual = document.getElementById("divisa").value;
+
+    // Validaciones básicas
+    if (!descripcion || isNaN(monto) || monto <= 0 || !tipo) {
+        alert("Por favor, completa todos los campos correctamente.");
+        return;
+    }
+
+    // Crear objeto de transacción
+    const nuevaTransaccion = {
+        descripcion,
+        monto,
+        tipo,
+        fecha: obtenerFechaActual(),
+    };
+
+    // Si el tipo es ingreso ➕ crear automáticamente un ahorro del 10%
+    if (tipo === "ingreso") {
+        const ahorroAutomatico = parseFloat((monto * 0.10).toFixed(2));
+
+        const transAhorro = {
+            descripcion: "Ahorro automático (10%)",
+            monto: ahorroAutomatico,
+            tipo: "ahorro",
+            fecha: obtenerFechaActual(),
+        };
+
+        // Añadir ambos movimientos
+        transacciones.push(nuevaTransaccion);
+        transacciones.push(transAhorro);
+    } else {
+        // Si es gasto o ahorro manual
+        transacciones.push(nuevaTransaccion);
+    }
+
+    // Actualizar pantalla
+    actualizarResumen();
+    renderizarTabla();
+    guardarLocal();
+
+    // Limpiar formulario
+    e.target.reset();
 });
 
-// --------------------------
-// Eliminar movimiento
-// --------------------------
-document.getElementById("tabla-movimientos").addEventListener("click", function(e) {
-  if (e.target.classList.contains("btn-eliminar")) {
-    const fila = e.target.closest("tr");
-    const index = Array.from(this.rows).indexOf(fila) - 1; // Ajuste por header
-    const mov = movimientos[index];
 
-    // Ajustar totales
-    if (mov.tipo === "ingreso") {
-      ingresos -= mov.monto;
-      saldo -= mov.monto;
-      ahorro -= mov.monto * 0.10;
-      saldo += mov.monto * 0.10;
-    } else if (mov.tipo === "gasto") {
-      gastos -= mov.monto;
-      saldo += mov.monto;
-    }
+// 💬 FRASES MOTIVACIONALES ALEATORIAS
+// ---------------------------------------------------------------
+const frases = [
+    "“Ahorra antes de gastar, no después.” 💡",
+    "“Pequeños ahorros, grandes resultados.” 🌱",
+    "“Tu dinero trabaja mejor cuando tú descansas.” 😎",
+    "“Invertir en ti es el mejor negocio.” 💼",
+    "“Cada euro ahorrado es libertad ganada.” 🚀"
+];
 
-    movimientos.splice(index, 1);
-    fila.remove();
-    actualizarResumen();
+function fraseAleatoria() {
+    const frase = frases[Math.floor(Math.random() * frases.length)];
+    document.getElementById("frase-motivacional").textContent = frase;
+}
 
-    if (movimientos.length === 0) {
-      this.innerHTML = `<tr><td colspan="5" class="text-secondary fst-italic">Aún no hay movimientos registrados 🧾</td></tr>`;
-    }
-  }
+
+// 🏁 INICIALIZACIÓN DE LA APP
+// ---------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", () => {
+    cargarLocal();          // Cargar datos guardados (si existen)
+    actualizarResumen();    // Actualizar totales
+    renderizarTabla();      // Renderizar movimientos
+    fraseAleatoria();       // Mostrar una frase inspiradora al inicio
 });
