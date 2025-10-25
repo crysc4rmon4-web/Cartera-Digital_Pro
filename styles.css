@@ -1,0 +1,104 @@
+/* 🌌 Fondo general: gradiente oscuro moderno premium */
+body {
+  background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #0f0f1f); /* tonos más oscuros y elegantes */
+  color: #f8f9fa; /* texto claro */
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 💎 Glassmorphism: tarjetas con efecto premium */
+.glass-card {
+  background: rgba(255, 255, 255, 0.07); /* ligero efecto vidrio */
+  backdrop-filter: blur(14px);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+/* 💚 Botones: bordes redondeados y hover sutil */
+.btn {
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+/* 📊 Tabla */
+.table {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+/* 💰 Resumen financiero */
+.resumen-financiero .card h6 {
+  font-weight: 600;
+}
+
+/* 🧾 Formularios: inputs y selects oscuros con texto claro */
+.form-transacciones input.input-dark,
+.form-transacciones select.select-dark {
+  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.05); /* fondo oscuro translúcido */
+  color: #f8f9fa; /* texto claro */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.form-transacciones input.input-dark::placeholder,
+.form-transacciones select.select-dark option {
+  color: rgba(255, 255, 255, 0.4); /* placeholder claro pero visible */
+}
+/* Números de resumen financiero: más claros para visibilidad */
+.resumen-financiero .card h3 {
+  color: #e0e0e0; /* gris claro, más visible sobre fondo oscuro */
+}
+
+/* Inputs y selects oscuros */
+.form-transacciones input.input-dark,
+.form-transacciones select.select-dark {
+  border-radius: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.08); /* ligeramente más visible */
+  color: #f8f9fa; /* texto claro */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Select desplegable: mantener fondo oscuro */
+.form-transacciones select.select-dark option {
+  background-color: #1a1a2e; /* fondo de opciones */
+  color: #f8f9fa; /* texto visible */
+}
+/* Estilo general para select dark */
+.select-dark {
+    background-color: #2c2f33; /* fondo oscuro */
+    color: #f1f1f1; /* texto claro */
+    border: 1px solid #555; /* borde suave */
+}
+
+/* Opciones normales dentro del select */
+.select-dark option {
+    background-color: #2c2f33; /* fondo oscuro de las opciones */
+    color: #f1f1f1; /* texto claro */
+}
+
+/* Estilo para los optgroup labels */
+.select-dark optgroup {
+    background-color: rgba(39, 42, 125, 0.758);
+    color: #272726; /* color distintivo para la categoría */
+    font-weight: bold;
+}
+
+/* En algunos navegadores, las opciones dentro de optgroup pueden necesitar */
+.select-dark optgroup option {
+    background-color: #2c2f33;
+    color: #f1f1f1;
+}
+/* 🦶 Footer: más elegante con opacidad */
+footer {
+  background: rgba(0, 0, 0, 0.6);
+  letter-spacing: 0.3px;
+}
