@@ -221,6 +221,11 @@ body.bg-dark {
     height: 300px !important;
 }
 
+/* Degradado para gráfico de ahorro */
+#graficoAhorroGradient {
+    background: linear-gradient(180deg, #0dcaf0 0%, #198754 100%);
+}
+
 
 
 

@@ -14,6 +14,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const historial = document.getElementById("tabla-movimientos");
   const fraseMotivacional = document.getElementById("frase-motivacional");
 
+  const saldoTotalDOM = document.getElementById("saldo-total");
+  const ingresosTotalDOM = document.getElementById("ingresos-total");
+  const gastosTotalDOM = document.getElementById("gastos-total");
+  const ahorroTotalDOM = document.getElementById("ahorro-total");
+
   // ==============================
   // FRASES MOTIVACIONALES
   // ==============================
@@ -24,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Controlar tus gastos es controlar tu libertad 💼",
     "El mejor momento para empezar fue ayer. El segundo mejor, hoy ⏰",
     "Tu cartera digital, tu tranquilidad 💖",
-    "No ahorres lo que te queda después de gastar; gasta lo que te queda después de ahorrar 💡",
+    "No ahorres lo que te queda después de gastar; gasta lo que te quede después de ahorrar 💡",
     "Pequeños pasos crean grandes logros 🚀",
     "Domina tu dinero, no dejes que él te domine 🔥",
     "Cada decisión cuenta. Haz que sume 📈"
@@ -37,47 +42,97 @@ document.addEventListener("DOMContentLoaded", () => {
   mostrarFrase();
 
   // ==============================
-  // GRÁFICOS CHART.JS
+  // GRÁFICOS CHART.JS MODERNOS
   // ==============================
   const ctxBalance = document.getElementById("graficoBalance").getContext("2d");
   const ctxAhorro = document.getElementById("graficoAhorro").getContext("2d");
 
+  // 🔹 Balance general - barras horizontales con gradiente
+  const gradientIngresos = ctxBalance.createLinearGradient(0, 0, 400, 0);
+  gradientIngresos.addColorStop(0, "#00ff99");
+  gradientIngresos.addColorStop(1, "#198754");
+
+  const gradientGastos = ctxBalance.createLinearGradient(0, 0, 400, 0);
+  gradientGastos.addColorStop(0, "#ff5c5c");
+  gradientGastos.addColorStop(1, "#dc3545");
+
+  const gradientAhorros = ctxBalance.createLinearGradient(0, 0, 400, 0);
+  gradientAhorros.addColorStop(0, "#ffd54f");
+  gradientAhorros.addColorStop(1, "#ffc107");
+
   const graficoBalance = new Chart(ctxBalance, {
-    type: "doughnut",
+    type: "bar",
     data: {
       labels: ["Ingresos", "Gastos", "Ahorros"],
       datasets: [{
+        label: "Balance (€)",
         data: [0, 0, 0],
-        backgroundColor: ["#198754", "#dc3545", "#ffc107"],
-        borderWidth: 1
+        backgroundColor: [gradientIngresos, gradientGastos, gradientAhorros],
+        borderRadius: 6,
+        barPercentage: 0.6,
+        categoryPercentage: 0.5
       }]
     },
     options: {
+      indexAxis: 'y', // barra horizontal
       responsive: true,
       plugins: {
-        legend: { position: "bottom" },
-        title: { display: true, text: "Balance Financiero", font: { size: 16 }, color: "#fff" }
+        legend: { display: false },
+        title: {
+          display: true,
+          text: "Balance General",
+          font: { size: 18 },
+          color: "#00ff99"
+        },
+        tooltip: { enabled: true, callbacks: { label: (ctx) => `${ctx.dataset.label}: €${ctx.raw}` } }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          ticks: { color: "#fff" },
+          grid: { color: "rgba(255,255,255,0.1)" }
+        },
+        y: {
+          ticks: { color: "#fff" },
+          grid: { display: false }
+        }
       }
     }
   });
 
+  // 🔹 Progreso de ahorro - doughnut con efecto moderno
   const graficoAhorro = new Chart(ctxAhorro, {
-    type: "bar",
+    type: "doughnut",
     data: {
-      labels: ["Ahorro (10%)"],
+      labels: ["Ahorro", "Restante"],
       datasets: [{
-        label: "Ahorro acumulado",
-        data: [0],
-        backgroundColor: ["#0dcaf0"]
+        label: "Progreso de Ahorro",
+        data: [0, 100],
+        backgroundColor: ["#0dcaf0", "rgba(13,202,240,0.2)"],
+        borderWidth: 2,
+        hoverOffset: 8
       }]
     },
     options: {
       responsive: true,
+      cutout: "70%",
       plugins: {
         legend: { display: false },
-        title: { display: true, text: "Progreso de Ahorro", font: { size: 16 }, color: "#fff" }
-      },
-      scales: { y: { beginAtZero: true } }
+        title: {
+          display: true,
+          text: "Progreso de Ahorro",
+          font: { size: 16 },
+          color: "#0dcaf0"
+        },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              if (ctx.label === "Ahorro") return `Ahorro: €${totalAhorros.toFixed(2)}`;
+              return "Restante";
+            }
+          }
+        }
+      }
     }
   });
 
@@ -102,10 +157,12 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Actualizar totales
     if (tipo === "ingreso") totalIngresos += monto;
     if (tipo === "gasto") totalGastos += monto;
     totalAhorros = totalIngresos * 0.1;
 
+    // Crear fila historial
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${descripcion}</td>
@@ -116,19 +173,33 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     historial.prepend(fila);
 
+    // Limpiar inputs
     descripcionInput.value = "";
     montoInput.value = "";
     tipoInput.value = "";
-    ahorroCalculado.value = (totalIngresos * 0.1).toFixed(2);
+    ahorroCalculado.value = totalAhorros.toFixed(2);
 
+    // Actualizar tarjetas y gráficos
+    actualizarTotales();
     actualizarGraficos();
   });
 
+  function actualizarTotales() {
+    ingresosTotalDOM.textContent = totalIngresos.toFixed(2) + " €";
+    gastosTotalDOM.textContent = totalGastos.toFixed(2) + " €";
+    ahorroTotalDOM.textContent = totalAhorros.toFixed(2) + " €";
+    saldoTotalDOM.textContent = (totalIngresos - totalGastos).toFixed(2) + " €";
+  }
+
   function actualizarGraficos() {
+    // 🔹 Balance
     graficoBalance.data.datasets[0].data = [totalIngresos, totalGastos, totalAhorros];
     graficoBalance.update();
 
-    graficoAhorro.data.datasets[0].data = [totalAhorros];
+    // 🔹 Ahorro
+    const restante = Math.max(totalIngresos - totalAhorros, 0);
+    graficoAhorro.data.datasets[0].data = [totalAhorros, restante];
     graficoAhorro.update();
   }
+
 });
