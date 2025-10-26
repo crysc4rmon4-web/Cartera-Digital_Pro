@@ -192,11 +192,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function actualizarGraficos() {
-    // 🔹 Balance
     graficoBalance.data.datasets[0].data = [totalIngresos, totalGastos, totalAhorros];
     graficoBalance.update();
 
-    // 🔹 Ahorro
     const restante = Math.max(totalIngresos - totalAhorros, 0);
     graficoAhorro.data.datasets[0].data = [totalAhorros, restante];
     graficoAhorro.update();
@@ -209,6 +207,7 @@ const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-tog
 const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
   return new bootstrap.Tooltip(tooltipTriggerEl)
 })
+
 // Modal de ahorro
 const btnAhorro = document.getElementById("btnAhorro");
 const modalAhorro = document.getElementById("modalAhorroConsejo");
@@ -231,3 +230,37 @@ window.addEventListener("click", (e) => {
   }
 });
 
+// ==============================
+// CONSEJOS ALEATORIOS EN EL RECUADRO EXISTENTE
+// ==============================
+const consejos = [
+  "💸 Consejo: Reserva siempre al menos un 10% de tus ingresos antes de gastar en otras cosas.",
+  "💸 Consejo: Lleva un registro sencillo de tus gastos diarios para tener control total.",
+  "💸 Consejo: Revisa tus gastos recurrentes mensualmente y elimina lo innecesario.",
+  "💸 Consejo: Prioriza pagar deudas con mayor interés para reducir carga financiera.",
+  "💸 Consejo: Automatiza tus ahorros para que no dependan de tu fuerza de voluntad.",
+  "💸 Consejo: Invierte tiempo en aprender sobre finanzas personales, no solo dinero.",
+  "💸 Consejo: Divide tu dinero en categorías: ahorro, gasto, inversión y emergencias.",
+  "💸 Consejo: Evita compras impulsivas y espera 24 horas antes de decidir.",
+  "💸 Consejo: Establece metas financieras claras y realistas cada mes.",
+  "💸 Consejo: Compara antes de gastar en productos grandes o servicios recurrentes.",
+  "💸 Consejo: Aprovecha el interés compuesto reinvirtiendo de manera constante.",
+  "💸 Consejo: Crea un fondo de emergencia equivalente a 3-6 meses de gastos.",
+  "💸 Consejo: Usa presupuestos flexibles, ajustándolos según tus ingresos.",
+  "💸 Consejo: No pongas todos tus ahorros en un solo lugar, diversifica.",
+  "💸 Consejo: Aprende a leer y entender tus estados financieros personales.",
+  "💸 Consejo: Piensa en compras grandes como inversión en calidad, no solo gasto.",
+  "💸 Consejo: Revisa tus metas financieras trimestralmente y ajusta estrategias.",
+  "💸 Consejo: Evita endeudarte por consumo innecesario, prioriza tu libertad.",
+  "💸 Consejo: Pequeñas acciones diarias suman grandes resultados a largo plazo."
+];
+
+// Apuntar al recuadro de consejo ya existente
+const collapseConsejo = document.querySelector("#tipsAhorro .alert");
+
+// Cambiar consejo cada vez que se haga clic en el botón
+const btnConsejos = document.querySelector('button[data-bs-toggle="collapse"][data-bs-target="#tipsAhorro"]');
+btnConsejos.addEventListener("click", () => {
+  const indice = Math.floor(Math.random() * consejos.length);
+  collapseConsejo.textContent = consejos[indice];
+});
