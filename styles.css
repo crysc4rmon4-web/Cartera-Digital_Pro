@@ -3,93 +3,158 @@
 /* ============================================================ */
 
 /* 🎨 Base general */
-body { /* #1 */
-  background-color: #121212; /* #2 - fondo oscuro */
-  color: #e0e0e0; /* #3 - texto claro */
-  font-family: "Inter", sans-serif; /* #4 */
-  min-height: 100vh; /* #5 */
+body {
+  /* #1 */
+  background-color: #121212;
+  /* #2 - fondo oscuro */
+  color: #e0e0e0;
+  /* #3 - texto claro */
+  font-family: "Inter", sans-serif;
+  /* #4 */
+  min-height: 100vh;
+  /* #5 */
 }
 
 /* 🧭 Navbar y encabezado */
-.navbar { /* #6 */
-  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* #7 */
-  border-bottom: 1px solid rgba(0, 255, 128, 0.3); /* #8 */
+.navbar {
+  /* #6 */
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
+  /* #7 */
+  border-bottom: 1px solid rgba(0, 255, 128, 0.3);
+  /* #8 */
 }
 
 /* 💎 Tarjetas con efecto vidrio */
-.glass-card { /* #9 */
-  background: rgba(255, 255, 255, 0.05); /* #10 */
-  backdrop-filter: blur(10px); /* #11 */
-  border-radius: 1rem; /* #12 */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* #13 */
-  color: #f0f0f0; /* #14 */
-  transition: transform 0.2s ease, box-shadow 0.3s ease; /* #15 */
+.glass-card {
+  /* #9 */
+  background: rgba(255, 255, 255, 0.05);
+  /* #10 */
+  backdrop-filter: blur(10px);
+  /* #11 */
+  border-radius: 1rem;
+  /* #12 */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* #13 */
+  color: #f0f0f0;
+  /* #14 */
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  /* #15 */
 }
-.glass-card:hover { /* #16 */
-  transform: translateY(-3px); /* #17 */
-  box-shadow: 0 4px 12px rgba(0, 255, 128, 0.15); /* #18 */
+
+.glass-card:hover {
+  /* #16 */
+  transform: translateY(-3px);
+  /* #17 */
+  box-shadow: 0 4px 12px rgba(0, 255, 128, 0.15);
+  /* #18 */
 }
 
 /* 📊 Tarjetas de resumen financiero */
-.resumen-financiero .card { /* #19 */
-  background-color: rgba(0, 0, 0, 0.4); /* #20 */
+.resumen-financiero .card {
+  /* #19 */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* #20 */
 }
-.resumen-financiero h6 { /* #21 */
-  font-size: 0.9rem; /* #22 */
-  opacity: 0.85; /* #23 */
+
+.resumen-financiero h6 {
+  /* #21 */
+  font-size: 0.9rem;
+  /* #22 */
+  opacity: 0.85;
+  /* #23 */
 }
-.resumen-financiero h3 { /* #24 */
-  color: #fff; /* #25 */
+
+.resumen-financiero h3 {
+  /* #24 */
+  color: #fff;
+  /* #25 */
 }
 
 /* 🧾 Formulario */
-.form-transacciones label { /* #26 */
-  color: #e0e0e0; /* #27 */
+.form-transacciones label {
+  /* #26 */
+  color: #e0e0e0;
+  /* #27 */
 }
-.input-dark, .select-dark { /* #28 */
-  background-color: #1f1f1f; /* #29 */
-  color: #f5f5f5; /* #30 */
-  border: 1px solid #333; /* #31 */
+
+.input-dark,
+.select-dark {
+  /* #28 */
+  background-color: #1f1f1f;
+  /* #29 */
+  color: #f5f5f5;
+  /* #30 */
+  border: 1px solid #333;
+  /* #31 */
 }
-.input-dark:focus, .select-dark:focus { /* #32 */
-  border-color: #00ff99; /* #33 */
-  box-shadow: 0 0 8px rgba(0, 255, 153, 0.2); /* #34 */
+
+.input-dark:focus,
+.select-dark:focus {
+  /* #32 */
+  border-color: #00ff99;
+  /* #33 */
+  box-shadow: 0 0 8px rgba(0, 255, 153, 0.2);
+  /* #34 */
 }
 
 /* 💰 Botones */
-.btn { /* #35 */
-  font-weight: 600; /* #36 */
-  border-radius: 0.5rem; /* #37 */
+.btn {
+  /* #35 */
+  font-weight: 600;
+  /* #36 */
+  border-radius: 0.5rem;
+  /* #37 */
 }
-.btn-outline-light:hover { /* #38 */
-  background-color: #00ff99; /* #39 */
-  color: #111; /* #40 */
+
+.btn-outline-light:hover {
+  /* #38 */
+  background-color: #00ff99;
+  /* #39 */
+  color: #111;
+  /* #40 */
 }
 
 /* 📋 Tabla de movimientos */
-.table-dark { /* #41 */
-  background-color: #181818; /* #42 */
-  color: #f0f0f0; /* #43 */
+.table-dark {
+  /* #41 */
+  background-color: #181818;
+  /* #42 */
+  color: #f0f0f0;
+  /* #43 */
 }
-.table-dark tbody tr:hover { /* #44 */
-  background-color: rgba(0, 255, 128, 0.08); /* #45 */
+
+.table-dark tbody tr:hover {
+  /* #44 */
+  background-color: rgba(0, 255, 128, 0.08);
+  /* #45 */
 }
-.table thead { /* #46 */
-  background-color: #00ff99; /* #47 */
-  color: #6c6666; /* #48 */
+
+.table thead {
+  /* #46 */
+  background-color: #00ff99;
+  /* #47 */
+  color: #6c6666;
+  /* #48 */
 }
 
 /* 💬 Frase motivacional */
-#frase-motivacional { /* #49 */
-  font-style: italic; /* #50 */
-  color: #9afac8; /* #51 */
+#frase-motivacional {
+  /* #49 */
+  font-style: italic;
+  /* #50 */
+  color: #9afac8;
+  /* #51 */
 }
 
 /* 💡 Alertas y colapsables */
-.alert-success { /* #52 */
-  background-color: rgba(0, 255, 128, 0.1); /* #53 */
-  color: #9afac8; /* #54 */
-  border: 1px solid rgba(0, 255, 128, 0.2); /* #55 */
+.alert-success {
+  /* #52 */
+  background-color: rgba(0, 255, 128, 0.1);
+  /* #53 */
+  color: #9afac8;
+  /* #54 */
+  border: 1px solid rgba(0, 255, 128, 0.2);
+  /* #55 */
 }
 
 /* ========================================================= */
@@ -104,12 +169,15 @@ body { /* #1 */
 }
 
 /* Forzar inputs y selects */
-.form-control, .form-select {
+.form-control,
+.form-select {
   background-color: #1f1f1f !important;
   color: #f5f5f5 !important;
   border: 1px solid #6e6969 !important;
 }
-.form-control:focus, .form-select:focus {
+
+.form-control:focus,
+.form-select:focus {
   border-color: #00ff99 !important;
   box-shadow: 0 0 6px rgba(0, 255, 128, 0.2) !important;
 }
@@ -119,6 +187,7 @@ body { /* #1 */
   background-color: #181818 !important;
   color: #f0f0f0 !important;
 }
+
 .table thead {
   background-color: #00ff99 !important;
   color: #413f3f !important;
@@ -133,10 +202,13 @@ body { /* #1 */
 body.bg-dark {
   background-color: #121212 !important;
 }
+
 /* 🔤 Color del texto "placeholder" dentro de los inputs */
 .form-control::placeholder {
-  color: #bfbfbf !important; /* Gris claro legible */
-  opacity: 1 !important; /* Evita que se vea transparente */
+  color: #bfbfbf !important;
+  /* Gris claro legible */
+  opacity: 1 !important;
+  /* Evita que se vea transparente */
 }
 
 /* Si también tienes selects con texto "Selecciona..." */
@@ -148,11 +220,18 @@ body.bg-dark {
 
 
 /* 🦶 Footer */
-footer { /* #56 */
-  background-color: #0f0f0f; /* #57 */
-  color: #888; /* #58 */
-  border-top: 1px solid rgba(255, 255, 255, 0.1); /* #59 */
+footer {
+  /* #56 */
+  background-color: #0f0f0f;
+  /* #57 */
+  color: #888;
+  /* #58 */
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  /* #59 */
 }
-footer code { /* #60 */
-  color: #ff5555; /* #61 */
+
+footer code {
+  /* #60 */
+  color: #ff5555;
+  /* #61 */
 }
