@@ -1,218 +1,151 @@
-// ================================
-// 💼 CARTERA DIGITAL PRO - v1.1
-// Fase 2: Persistencia local básica
-// ================================
+// ==============================
+// VARIABLES GLOBALES
+// ==============================
 
-// 🎯 ELEMENTOS PRINCIPALES DEL DOM
-const form = document.getElementById("form-transaccion");
-const tablaMovimientos = document.getElementById("tabla-movimientos");
-const saldoTotal = document.getElementById("saldo-total");
-const ingresosTotal = document.getElementById("ingresos-total");
-const gastosTotal = document.getElementById("gastos-total");
-const ahorroTotal = document.getElementById("ahorro-total");
+// Totales
+let totalIngresos = 0;
+let totalGastos = 0;
+let totalAhorros = 0;
 
-// 🧠 DATOS PRINCIPALES DE LA APP
-let movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
-// Esto lee lo que haya guardado en el navegador, o empieza con un array vacío.
+// Referencias DOM
+const descripcionInput = document.getElementById("descripcion");
+const montoInput = document.getElementById("monto");
+const tipoInput = document.getElementById("tipo");
+const divisaInput = document.getElementById("divisa");
+const ahorroCalculado = document.getElementById("ahorro-calculado");
+const historial = document.getElementById("tabla-movimientos");
+const fraseMotivacional = document.getElementById("frase-motivacional");
 
-// ================================
-// 🧮 FUNCIONES PRINCIPALES
-// ================================
+// ==============================
+// FRASES MOTIVACIONALES
+// ==============================
+const frases = [
+  "Cada euro cuenta, pero la constancia vale más 💪",
+  "Ahorra hoy para disfrutar mañana 🌅",
+  "Tu futuro financiero empieza con un clic 🏦",
+  "Controlar tus gastos es controlar tu libertad 💼",
+  "El mejor momento para empezar fue ayer. El segundo mejor, hoy ⏰",
+  "Tu cartera digital, tu tranquilidad 💖",
+  "No ahorres lo que te queda después de gastar; gasta lo que te queda después de ahorrar 💡",
+  "Pequeños pasos crean grandes logros 🚀",
+  "Domina tu dinero, no dejes que él te domine 🔥",
+  "Cada decisión cuenta. Haz que sume 📈"
+];
 
-// 📥 1. Guardar los movimientos en localStorage
-function guardarDatos() {
-  localStorage.setItem("movimientos", JSON.stringify(movimientos));
+function mostrarFrase() {
+  const indice = Math.floor(Math.random() * frases.length);
+  fraseMotivacional.textContent = frases[indice];
 }
+mostrarFrase();
 
-// 📊 2. Actualizar los totales (ingresos, gastos, ahorro, saldo)
-function actualizarTotales() {
-  let ingresos = 0, gastos = 0, ahorro = 0;
+// ==============================
+// GRÁFICOS CHART.JS
+// ==============================
+const ctxBalance = document.getElementById("graficoBalance").getContext("2d");
+const ctxAhorro = document.getElementById("graficoAhorro").getContext("2d");
 
-  movimientos.forEach((m) => {
-    if (m.tipo === "ingreso") ingresos += m.monto;
-    else if (m.tipo === "gasto") gastos += m.monto;
-    else if (m.tipo === "ahorro") ahorro += m.monto;
-  });
+// Gráfico Balance general
+const graficoBalance = new Chart(ctxBalance, {
+  type: "doughnut",
+  data: {
+    labels: ["Ingresos", "Gastos", "Ahorros"],
+    datasets: [{
+      data: [0, 0, 0],
+      backgroundColor: ["#198754", "#dc3545", "#ffc107"], // verde, rojo, amarillo
+      borderWidth: 1
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: "bottom" },
+      title: { display: true, text: "Balance Financiero", font: { size: 16 }, color: "#fff" }
+    }
+  }
+});
 
-  // 💰 Cálculos de totales
-  const saldo = ingresos - gastos - ahorro;
+// Gráfico Progreso de ahorro
+const graficoAhorro = new Chart(ctxAhorro, {
+  type: "bar",
+  data: {
+    labels: ["Ahorro (10%)"],
+    datasets: [{
+      label: "Ahorro acumulado",
+      data: [0],
+      backgroundColor: ["#0dcaf0"]
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: "Progreso de Ahorro", font: { size: 16 }, color: "#fff" }
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
 
-  // ✍️ Mostrar en pantalla
-  ingresosTotal.textContent = `€${ingresos.toFixed(2)}`;
-  gastosTotal.textContent = `€${gastos.toFixed(2)}`;
-  ahorroTotal.textContent = `€${ahorro.toFixed(2)}`;
-  saldoTotal.textContent = `€${saldo.toFixed(2)}`;
-}
+// ==============================
+// FUNCIONES PRINCIPALES
+// ==============================
 
-// 🧾 3. Mostrar los movimientos en la tabla
-function renderMovimientos() {
-  tablaMovimientos.innerHTML = "";
+// Actualiza el campo de ahorro automáticamente al 10% de ingresos
+montoInput.addEventListener("input", () => {
+  const monto = parseFloat(montoInput.value) || 0;
+  ahorroCalculado.value = (monto * 0.1).toFixed(2);
+});
 
-  if (movimientos.length === 0) {
-    tablaMovimientos.innerHTML = `
-      <tr>
-        <td colspan="5" class="text-secondary fst-italic">
-          Aún no hay movimientos registrados 🧾
-        </td>
-      </tr>`;
+// Agregar nueva transacción
+document.getElementById("form-transaccion").addEventListener("submit", e => {
+  e.preventDefault();
+
+  const descripcion = descripcionInput.value.trim();
+  const monto = parseFloat(montoInput.value);
+  const tipo = tipoInput.value;
+  const divisa = divisaInput.value;
+
+  if (!descripcion || isNaN(monto) || monto <= 0 || !tipo) {
+    alert("Por favor, completa todos los campos correctamente.");
     return;
   }
 
-  movimientos.forEach((m, index) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
-      <td>${m.descripcion}</td>
-      <td>€${m.monto.toFixed(2)}</td>
-      <td>${m.tipo}</td>
-      <td>${m.fecha}</td>
-      <td>
-        <button class="btn btn-sm btn-outline-danger" onclick="eliminarMovimiento(${index})">
-          <i class="bi bi-trash"></i>
-        </button>
-      </td>
-    `;
-    tablaMovimientos.appendChild(fila);
-  });
-}
+  // Actualizar totales
+  if (tipo === "ingreso") totalIngresos += monto;
+  if (tipo === "gasto") totalGastos += monto;
+  totalAhorros = totalIngresos * 0.1; // ahorro 10%
 
-// ❌ 4. Eliminar movimiento por índice
-function eliminarMovimiento(index) {
-  movimientos.splice(index, 1);  // elimina 1 elemento en la posición index
-  guardarDatos();
-  actualizarTotales();
-  renderMovimientos();
-}
+  // Crear fila en tabla
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td>${descripcion}</td>
+    <td>${monto.toFixed(2)} ${divisa}</td>
+    <td>${tipo}</td>
+    <td>${new Date().toLocaleDateString()}</td>
+    <td>
+      <button class="btn btn-sm btn-outline-danger">Eliminar</button>
+    </td>
+  `;
+  historial.prepend(fila);
 
-// ➕ 5. Registrar nueva transacción
-form.addEventListener("submit", (e) => {
-  e.preventDefault(); // Evita que se recargue la página
+  // Limpiar inputs
+  descripcionInput.value = "";
+  montoInput.value = "";
+  tipoInput.value = "";
+  ahorroCalculado.value = (totalIngresos * 0.1).toFixed(2);
 
-  const descripcion = document.getElementById("descripcion").value;
-  const monto = parseFloat(document.getElementById("monto").value);
-  const tipo = document.getElementById("tipo").value;
-
-  if (!descripcion || !monto || !tipo) return alert("Por favor, completa todos los campos.");
-
-  // 💡 Si el tipo es 'ingreso', calculamos ahorro automático del 10%
-  if (tipo === "ingreso") {
-    const ahorro10 = monto * 0.1;
-    movimientos.push({
-      descripcion: "Ahorro automático (10%)",
-      monto: ahorro10,
-      tipo: "ahorro",
-      fecha: new Date().toLocaleDateString(),
-    });
-  }
-
-  // 🧾 Guardamos el movimiento principal
-  movimientos.push({
-    descripcion,
-    monto,
-    tipo,
-    fecha: new Date().toLocaleDateString(),
-  });
-
-  // 🧠 Actualizamos todo
-  guardarDatos();
-  actualizarTotales();
-  renderMovimientos();
-  form.reset();
+  // Actualizar gráficos
+  actualizarGraficos();
 });
 
-// 🚀 6. Al cargar la página
-document.addEventListener("DOMContentLoaded", () => {
-  actualizarTotales();
-  renderMovimientos();
-});
+// Función que actualiza los gráficos
+function actualizarGraficos() {
+  // Doughnut
+  graficoBalance.data.datasets[0].data = [totalIngresos, totalGastos, totalAhorros];
+  graficoBalance.update();
 
-// ================================
-// 📊 GRÁFICO DE AHORRO AUTOMÁTICO
-// ================================
-
-// Variable global para el gráfico
-let graficoAhorro;
-
-// Función para crear o actualizar el gráfico
-function actualizarGrafico() {
-  const ingresos = movimientos.filter(m => m.tipo === "ingreso").reduce((a, b) => a + b.monto, 0);
-  const ahorro = movimientos.filter(m => m.tipo === "ahorro").reduce((a, b) => a + b.monto, 0);
-  const gastos = movimientos.filter(m => m.tipo === "gasto").reduce((a, b) => a + b.monto, 0);
-
-  const restante = ingresos - gastos - ahorro;
-  const ctx = document.getElementById("graficoAhorro").getContext("2d");
-
-  // Si el gráfico ya existe, lo destruimos para actualizarlo
-  if (graficoAhorro) graficoAhorro.destroy();
-
-  graficoAhorro = new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["Ahorro", "Gastos", "Saldo restante"],
-      datasets: [{
-        data: [ahorro, gastos, restante > 0 ? restante : 0],
-        backgroundColor: [
-          "rgba(255, 206, 86, 0.8)", // amarillo para ahorro
-          "rgba(255, 99, 132, 0.8)", // rojo para gastos
-          "rgba(75, 192, 192, 0.8)"  // verde agua para saldo
-        ],
-        borderWidth: 1,
-        hoverOffset: 10
-      }]
-    },
-    options: {
-      plugins: {
-        legend: {
-          labels: { color: "#fff", font: { size: 14 } },
-          position: "bottom"
-        }
-      },
-      cutout: "70%",
-    }
-  });
+  // Bar
+  graficoAhorro.data.datasets[0].data = [totalAhorros];
+  graficoAhorro.update();
 }
-
-// Modificamos la parte final de DOMContentLoaded
-document.addEventListener("DOMContentLoaded", () => {
-  actualizarTotales();
-  renderMovimientos();
-  actualizarGrafico(); // <-- añadimos esto
-});
-
-// También actualizamos el gráfico cada vez que se modifiquen los datos
-function actualizarTodo() {
-  guardarDatos();
-  actualizarTotales();
-  renderMovimientos();
-  actualizarGrafico();
-}
-
-// Y reemplazamos donde antes tenías guardarDatos + render + actualizarTotales por:
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const descripcion = document.getElementById("descripcion").value;
-  const monto = parseFloat(document.getElementById("monto").value);
-  const tipo = document.getElementById("tipo").value;
-
-  if (!descripcion || !monto || !tipo) return alert("Por favor, completa todos los campos.");
-
-  if (tipo === "ingreso") {
-    const ahorro10 = monto * 0.1;
-    movimientos.push({
-      descripcion: "Ahorro automático (10%)",
-      monto: ahorro10,
-      tipo: "ahorro",
-      fecha: new Date().toLocaleDateString(),
-    });
-  }
-
-  movimientos.push({
-    descripcion,
-    monto,
-    tipo,
-    fecha: new Date().toLocaleDateString(),
-  });
-
-  actualizarTodo();
-  form.reset();
-});

@@ -216,6 +216,11 @@ body.bg-dark {
   color: #bfbfbf !important;
 }
 
+#graficoBalance, #graficoAhorro {
+    width: 100% !important;
+    height: 300px !important;
+}
+
 
 
 
