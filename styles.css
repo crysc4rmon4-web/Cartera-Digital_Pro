@@ -24,6 +24,39 @@ body {
   /* #8 */
 }
 
+/* ✨ Animaciones Navbar / Encabezado */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade {
+  animation: fadeIn 1s ease-out forwards;
+}
+
+.animate-slide {
+  animation: slideUp 1.2s ease-out forwards;
+}
+
 /* 💎 Tarjetas con efecto vidrio */
 .glass-card {
   /* #9 */
@@ -216,16 +249,60 @@ body.bg-dark {
   color: #bfbfbf !important;
 }
 
-#graficoBalance, #graficoAhorro {
-    width: 100% !important;
-    height: 300px !important;
+#graficoBalance,
+#graficoAhorro {
+  width: 100% !important;
+  height: 300px !important;
 }
 
 /* Degradado para gráfico de ahorro */
 #graficoAhorroGradient {
-    background: linear-gradient(180deg, #0dcaf0 0%, #198754 100%);
+  background: linear-gradient(180deg, #0dcaf0 0%, #198754 100%);
 }
 
+/* Fondo del modal */
+.modal-consejo {
+  display: none;
+  /* oculto por defecto */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+/* Contenido del modal */
+.modal-contenido {
+  background: linear-gradient(135deg, #0f2027, #203a43);
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  border: 2px solid #ffc107;
+}
+
+/* Animación suave al aparecer */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-fade {
+  animation: fadeIn 0.5s ease-out forwards;
+}
 
 
 

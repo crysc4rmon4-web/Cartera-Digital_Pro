@@ -203,3 +203,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 });
+
+// Inicializar todos los tooltips de Bootstrap
+const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+// Modal de ahorro
+const btnAhorro = document.getElementById("btnAhorro");
+const modalAhorro = document.getElementById("modalAhorroConsejo");
+const cerrarModal = document.getElementById("cerrarModal");
+
+// Mostrar modal al hacer clic
+btnAhorro.addEventListener("click", () => {
+  modalAhorro.style.display = "flex";
+});
+
+// Cerrar modal al hacer clic en el botón
+cerrarModal.addEventListener("click", () => {
+  modalAhorro.style.display = "none";
+});
+
+// Opcional: cerrar modal si se hace clic fuera del contenido
+window.addEventListener("click", (e) => {
+  if (e.target === modalAhorro) {
+    modalAhorro.style.display = "none";
+  }
+});
+
