@@ -1,80 +1,158 @@
-//* 🎨 Estilos base */
-body {
-  background-color: #f8f9fa;
-  color: #212529;
-  font-family: "Inter", sans-serif;
+/* ============================================================ */
+/* 🌙 TEMA OSCURO — Cartera Digital Pro                         */
+/* ============================================================ */
+
+/* 🎨 Base general */
+body { /* #1 */
+  background-color: #121212; /* #2 - fondo oscuro */
+  color: #e0e0e0; /* #3 - texto claro */
+  font-family: "Inter", sans-serif; /* #4 */
+  min-height: 100vh; /* #5 */
 }
 
-/* 🧭 Encabezado */
-.app-header {
-  background: #ffffff;
-  border-bottom: 1px solid #e0e0e0;
+/* 🧭 Navbar y encabezado */
+.navbar { /* #6 */
+  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364); /* #7 */
+  border-bottom: 1px solid rgba(0, 255, 128, 0.3); /* #8 */
 }
 
-/* 📊 Tarjetas de resumen */
-.summary .card {
-  flex: 1;
-  min-width: 250px;
-  transition: transform 0.2s ease;
+/* 💎 Tarjetas con efecto vidrio */
+.glass-card { /* #9 */
+  background: rgba(255, 255, 255, 0.05); /* #10 */
+  backdrop-filter: blur(10px); /* #11 */
+  border-radius: 1rem; /* #12 */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* #13 */
+  color: #f0f0f0; /* #14 */
+  transition: transform 0.2s ease, box-shadow 0.3s ease; /* #15 */
+}
+.glass-card:hover { /* #16 */
+  transform: translateY(-3px); /* #17 */
+  box-shadow: 0 4px 12px rgba(0, 255, 128, 0.15); /* #18 */
 }
 
-.summary .card:hover {
-  transform: translateY(-4px);
+/* 📊 Tarjetas de resumen financiero */
+.resumen-financiero .card { /* #19 */
+  background-color: rgba(0, 0, 0, 0.4); /* #20 */
 }
-
-/* Colores distintivos */
-.card.ingreso {
-  border-top: 4px solid #4caf50;
+.resumen-financiero h6 { /* #21 */
+  font-size: 0.9rem; /* #22 */
+  opacity: 0.85; /* #23 */
 }
-
-.card.gasto {
-  border-top: 4px solid #f44336;
-}
-
-.card.ahorro {
-  border-top: 4px solid #2196f3;
-}
-
-/* 💸 Montos (ahora con color más visible) */
-.monto {
-  font-size: 1.8rem;
-  font-weight: 600;
-  color: #444 !important; /* antes era gris claro que se perdía */
+.resumen-financiero h3 { /* #24 */
+  color: #fff; /* #25 */
 }
 
 /* 🧾 Formulario */
-form {
-  background-color: #ffffff;
+.form-transacciones label { /* #26 */
+  color: #e0e0e0; /* #27 */
+}
+.input-dark, .select-dark { /* #28 */
+  background-color: #1f1f1f; /* #29 */
+  color: #f5f5f5; /* #30 */
+  border: 1px solid #333; /* #31 */
+}
+.input-dark:focus, .select-dark:focus { /* #32 */
+  border-color: #00ff99; /* #33 */
+  box-shadow: 0 0 8px rgba(0, 255, 153, 0.2); /* #34 */
 }
 
-input,
-select,
-button {
-  border-radius: 0.5rem;
+/* 💰 Botones */
+.btn { /* #35 */
+  font-weight: 600; /* #36 */
+  border-radius: 0.5rem; /* #37 */
+}
+.btn-outline-light:hover { /* #38 */
+  background-color: #00ff99; /* #39 */
+  color: #111; /* #40 */
 }
 
-button {
-  font-weight: 600;
+/* 📋 Tabla de movimientos */
+.table-dark { /* #41 */
+  background-color: #181818; /* #42 */
+  color: #f0f0f0; /* #43 */
+}
+.table-dark tbody tr:hover { /* #44 */
+  background-color: rgba(0, 255, 128, 0.08); /* #45 */
+}
+.table thead { /* #46 */
+  background-color: #00ff99; /* #47 */
+  color: #6c6666; /* #48 */
 }
 
-/* 💬 Historial */
-#lista-transacciones li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background: #fff;
-  margin-bottom: 5px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+/* 💬 Frase motivacional */
+#frase-motivacional { /* #49 */
+  font-style: italic; /* #50 */
+  color: #9afac8; /* #51 */
 }
 
-/* 🎚️ Tipo visual */
-.ingreso-item {
-  color: #4caf50;
-  font-weight: 600;
+/* 💡 Alertas y colapsables */
+.alert-success { /* #52 */
+  background-color: rgba(0, 255, 128, 0.1); /* #53 */
+  color: #9afac8; /* #54 */
+  border: 1px solid rgba(0, 255, 128, 0.2); /* #55 */
 }
 
-.gasto-item {
-  color: #f44336;
-  font-weight: 600;
+/* ========================================================= */
+/* 🛠️ Refuerzo de tema oscuro para tarjetas y formularios */
+/* ========================================================= */
+
+/* Forzar tarjetas Bootstrap */
+.card {
+  background-color: #1a1a1a !important;
+  color: #e0e0e0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Forzar inputs y selects */
+.form-control, .form-select {
+  background-color: #1f1f1f !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #6e6969 !important;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #00ff99 !important;
+  box-shadow: 0 0 6px rgba(0, 255, 128, 0.2) !important;
+}
+
+/* Forzar tabla oscura */
+.table {
+  background-color: #181818 !important;
+  color: #f0f0f0 !important;
+}
+.table thead {
+  background-color: #00ff99 !important;
+  color: #413f3f !important;
+}
+
+/* Ajustar textos secundarios */
+.text-secondary {
+  color: #aaa !important;
+}
+
+/* Asegurar fondo oscuro global */
+body.bg-dark {
+  background-color: #121212 !important;
+}
+/* 🔤 Color del texto "placeholder" dentro de los inputs */
+.form-control::placeholder {
+  color: #bfbfbf !important; /* Gris claro legible */
+  opacity: 1 !important; /* Evita que se vea transparente */
+}
+
+/* Si también tienes selects con texto "Selecciona..." */
+.form-select option[disabled] {
+  color: #bfbfbf !important;
+}
+
+
+
+
+/* 🦶 Footer */
+footer { /* #56 */
+  background-color: #0f0f0f; /* #57 */
+  color: #888; /* #58 */
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* #59 */
+}
+footer code { /* #60 */
+  color: #ff5555; /* #61 */
 }
