@@ -32,6 +32,9 @@ Todo funciona localmente y no está conectado a ninguna entidad financiera ni ma
 
 Este proyecto busca **practicar la integración de diseño, lógica y visualización de datos** en un entorno simple pero profesional.  
 
+## Levantar proyecto:
+
+python3 -m http.server 3000
 
 ---
 
